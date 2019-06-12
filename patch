@@ -1,0 +1,1015 @@
+diff -Naur a/media-bus-format.h b/media-bus-format.h
+--- a/include/linux/media-bus-format.h	1969-12-31 19:00:00.000000000 -0500
++++ b/include/linux/media-bus-format.h	2019-06-12 14:44:19.151922000 -0400
+@@ -0,0 +1,148 @@
++/*
++ * Media Bus API header
++ *
++ * Copyright (C) 2009, Guennadi Liakhovetski <g.liakhovetski@gmx.de>
++ * (C) Copyright 2008-2017 Fuzhou Rockchip Electronics Co., Ltd
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++#ifndef __LINUX_MEDIA_BUS_FORMAT_H
++#define __LINUX_MEDIA_BUS_FORMAT_H
++
++/*
++ * These bus formats uniquely identify data formats on the data bus. Format 0
++ * is reserved, MEDIA_BUS_FMT_FIXED shall be used by host-client pairs, where
++ * the data format is fixed. Additionally, "2X8" means that one pixel is
++ * transferred in two 8-bit samples, "BE" or "LE" specify in which order those
++ * samples are transferred over the bus: "LE" means that the least significant
++ * bits are transferred first, "BE" means that the most significant bits are
++ * transferred first, and "PADHI" and "PADLO" define which bits - low or high,
++ * in the incomplete high byte, are filled with padding bits.
++ *
++ * The bus formats are grouped by type, bus_width, bits per component, samples
++ * per pixel and order of subsamples. Numerical values are sorted using generic
++ * numerical sort order (8 thus comes before 10).
++ *
++ * As their value can't change when a new bus format is inserted in the
++ * enumeration, the bus formats are explicitly given a numerical value. The next
++ * free values for each category are listed below, update them when inserting
++ * new pixel codes.
++ */
++
++#define MEDIA_BUS_FMT_FIXED			0x0001
++
++/* RGB - next is	0x101c */
++#define MEDIA_BUS_FMT_RGB444_1X12		0x1016
++#define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
++#define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
++#define MEDIA_BUS_FMT_RGB555_2X8_PADHI_BE	0x1003
++#define MEDIA_BUS_FMT_RGB555_2X8_PADHI_LE	0x1004
++#define MEDIA_BUS_FMT_RGB565_1X16		0x1017
++#define MEDIA_BUS_FMT_BGR565_2X8_BE		0x1005
++#define MEDIA_BUS_FMT_BGR565_2X8_LE		0x1006
++#define MEDIA_BUS_FMT_RGB565_2X8_BE		0x1007
++#define MEDIA_BUS_FMT_RGB565_2X8_LE		0x1008
++#define MEDIA_BUS_FMT_RGB666_1X18		0x1009
++#define MEDIA_BUS_FMT_RBG888_1X24		0x100e
++#define MEDIA_BUS_FMT_RGB666_1X24_CPADHI	0x1015
++#define MEDIA_BUS_FMT_RGB666_1X7X3_SPWG		0x1010
++#define MEDIA_BUS_FMT_BGR888_1X24		0x1013
++#define MEDIA_BUS_FMT_GBR888_1X24		0x1014
++#define MEDIA_BUS_FMT_RGB888_1X24		0x100a
++#define MEDIA_BUS_FMT_RGB888_2X12_BE		0x100b
++#define MEDIA_BUS_FMT_RGB888_2X12_LE		0x100c
++#define MEDIA_BUS_FMT_RGB888_1X7X4_SPWG		0x1011
++#define MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA	0x1012
++#define MEDIA_BUS_FMT_ARGB8888_1X32		0x100d
++#define MEDIA_BUS_FMT_RGB888_1X32_PADHI		0x100f
++#define MEDIA_BUS_FMT_RGB101010_1X30		0x1018
++#define MEDIA_BUS_FMT_RGB121212_1X36		0x1019
++#define MEDIA_BUS_FMT_RGB161616_1X48		0x101a
++#define MEDIA_BUS_FMT_RGB666_1X7X3_JEIDA	0x101b
++
++/* YUV (including grey) - next is	0x2026 */
++#define MEDIA_BUS_FMT_Y8_1X8			0x2001
++#define MEDIA_BUS_FMT_UV8_1X8			0x2015
++#define MEDIA_BUS_FMT_UYVY8_1_5X8		0x2002
++#define MEDIA_BUS_FMT_VYUY8_1_5X8		0x2003
++#define MEDIA_BUS_FMT_YUYV8_1_5X8		0x2004
++#define MEDIA_BUS_FMT_YVYU8_1_5X8		0x2005
++#define MEDIA_BUS_FMT_UYVY8_2X8			0x2006
++#define MEDIA_BUS_FMT_VYUY8_2X8			0x2007
++#define MEDIA_BUS_FMT_YUYV8_2X8			0x2008
++#define MEDIA_BUS_FMT_YVYU8_2X8			0x2009
++#define MEDIA_BUS_FMT_Y10_1X10			0x200a
++#define MEDIA_BUS_FMT_UYVY10_2X10		0x2018
++#define MEDIA_BUS_FMT_VYUY10_2X10		0x2019
++#define MEDIA_BUS_FMT_YUYV10_2X10		0x200b
++#define MEDIA_BUS_FMT_YVYU10_2X10		0x200c
++#define MEDIA_BUS_FMT_Y12_1X12			0x2013
++#define MEDIA_BUS_FMT_UYVY12_2X12		0x201c
++#define MEDIA_BUS_FMT_VYUY12_2X12		0x201d
++#define MEDIA_BUS_FMT_YUYV12_2X12		0x201e
++#define MEDIA_BUS_FMT_YVYU12_2X12		0x201f
++#define MEDIA_BUS_FMT_UYVY8_1X16		0x200f
++#define MEDIA_BUS_FMT_VYUY8_1X16		0x2010
++#define MEDIA_BUS_FMT_YUYV8_1X16		0x2011
++#define MEDIA_BUS_FMT_YVYU8_1X16		0x2012
++#define MEDIA_BUS_FMT_YDYUYDYV8_1X16		0x2014
++#define MEDIA_BUS_FMT_UYVY10_1X20		0x201a
++#define MEDIA_BUS_FMT_VYUY10_1X20		0x201b
++#define MEDIA_BUS_FMT_YUYV10_1X20		0x200d
++#define MEDIA_BUS_FMT_YVYU10_1X20		0x200e
++#define MEDIA_BUS_FMT_VUY8_1X24			0x2024
++#define MEDIA_BUS_FMT_YUV8_1X24			0x2025
++#define MEDIA_BUS_FMT_UYYVYY8_0_5X24		0x2026
++#define MEDIA_BUS_FMT_UYVY12_1X24		0x2020
++#define MEDIA_BUS_FMT_VYUY12_1X24		0x2021
++#define MEDIA_BUS_FMT_YUYV12_1X24		0x2022
++#define MEDIA_BUS_FMT_YVYU12_1X24		0x2023
++#define MEDIA_BUS_FMT_YUV10_1X30		0x2016
++#define MEDIA_BUS_FMT_UYYVYY10_0_5X30		0x2027
++#define MEDIA_BUS_FMT_AYUV8_1X32		0x2017
++#define MEDIA_BUS_FMT_UYYVYY12_0_5X36		0x2028
++#define MEDIA_BUS_FMT_YUV12_1X36		0x2029
++#define MEDIA_BUS_FMT_YUV16_1X48		0x202a
++#define MEDIA_BUS_FMT_UYYVYY16_0_5X48		0x202b
++
++/* Bayer - next is	0x3019 */
++#define MEDIA_BUS_FMT_SBGGR8_1X8		0x3001
++#define MEDIA_BUS_FMT_SGBRG8_1X8		0x3013
++#define MEDIA_BUS_FMT_SGRBG8_1X8		0x3002
++#define MEDIA_BUS_FMT_SRGGB8_1X8		0x3014
++#define MEDIA_BUS_FMT_SBGGR10_ALAW8_1X8		0x3015
++#define MEDIA_BUS_FMT_SGBRG10_ALAW8_1X8		0x3016
++#define MEDIA_BUS_FMT_SGRBG10_ALAW8_1X8		0x3017
++#define MEDIA_BUS_FMT_SRGGB10_ALAW8_1X8		0x3018
++#define MEDIA_BUS_FMT_SBGGR10_DPCM8_1X8		0x300b
++#define MEDIA_BUS_FMT_SGBRG10_DPCM8_1X8		0x300c
++#define MEDIA_BUS_FMT_SGRBG10_DPCM8_1X8		0x3009
++#define MEDIA_BUS_FMT_SRGGB10_DPCM8_1X8		0x300d
++#define MEDIA_BUS_FMT_SBGGR10_2X8_PADHI_BE	0x3003
++#define MEDIA_BUS_FMT_SBGGR10_2X8_PADHI_LE	0x3004
++#define MEDIA_BUS_FMT_SBGGR10_2X8_PADLO_BE	0x3005
++#define MEDIA_BUS_FMT_SBGGR10_2X8_PADLO_LE	0x3006
++#define MEDIA_BUS_FMT_SBGGR10_1X10		0x3007
++#define MEDIA_BUS_FMT_SGBRG10_1X10		0x300e
++#define MEDIA_BUS_FMT_SGRBG10_1X10		0x300a
++#define MEDIA_BUS_FMT_SRGGB10_1X10		0x300f
++#define MEDIA_BUS_FMT_SBGGR12_1X12		0x3008
++#define MEDIA_BUS_FMT_SGBRG12_1X12		0x3010
++#define MEDIA_BUS_FMT_SGRBG12_1X12		0x3011
++#define MEDIA_BUS_FMT_SRGGB12_1X12		0x3012
++
++/* JPEG compressed formats - next is	0x4002 */
++#define MEDIA_BUS_FMT_JPEG_1X8			0x4001
++
++/* Vendor specific formats - next is	0x5002 */
++
++/* S5C73M3 sensor specific interleaved UYVY and JPEG */
++#define MEDIA_BUS_FMT_S5C_UYVY_JPEG_1X8		0x5001
++
++/* HSV - next is	0x6002 */
++#define MEDIA_BUS_FMT_AHSV8888_1X32		0x6001
++
++#endif /* __LINUX_MEDIA_BUS_FORMAT_H */
+diff -Naur a/rk3399-rockpro64.dts b/rk3399-rockpro64.dts
+--- a/arch/arm/dts/rk3399-rockpro64.dts	1969-12-31 19:00:00.000000000 -0500
++++ b/arch/arm/dts/rk3399-rockpro64.dts	2019-06-12 13:31:17.631000000 -0400
+@@ -0,0 +1,755 @@
++/*
++ * (C) Copyright 2016 Rockchip Electronics Co., Ltd
++ *
++ * SPDX-License-Identifier:     GPL-2.0+
++ */
++
++/dts-v1/;
++#include <dt-bindings/pwm/pwm.h>
++#include <dt-bindings/pinctrl/rockchip.h>
++#include "rk3399.dtsi"
++#include "rk3399-u-boot.dtsi"
++#include <linux/media-bus-format.h>
++#include <dt-bindings/input/input.h>
++
++/ {
++	model = "Rockchip RK3399 Rockpro64";
++	compatible = "rockchip,rk3399-evb", "rockchip,rk3399",
++		     "pine64,rk3399-rockpro64";
++
++	rk_key: rockchip-key {
++		u-boot,dm-pre-reloc;
++		compatible = "rockchip,key";
++		status = "okay";
++
++		io-channels = <&saradc 1>;
++
++		power-key {
++			u-boot,dm-pre-reloc;
++			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
++			linux,code = <116>;
++			label = "power";
++			gpio-key,wakeup;
++		};
++	};
++
++	xin32k: xin32k {
++		compatible = "fixed-clock";
++		clock-frequency = <32768>;
++		clock-output-names = "xin32k";
++		#clock-cells = <0>;
++	};
++
++	dc_12v: dc-12v {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "dc_12v";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++	};
++
++	vcc_sys: vcc-sys {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_sys";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-always-on;
++		regulator-boot-on;
++		vin-supply = <&dc_12v>;
++	};
++
++	vcc3v3_sys: vcc3v3-sys {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "vcc3v3_sys";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc_sys>;
++	};
++
++	vcc_phy: vcc-phy-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_phy";
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	vcc5v0_host: vcc5v0-host-en {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_host";
++		gpio = <&gpio4 RK_PD2 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&host_vbus_drv>;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	vcc5v0_usb3_host: vcc5v0-usb3-host-regulator {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_usb3_host";
++		enable-active-high;
++		gpio = <&gpio1 RK_PB5 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&host_usb3_drv>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	vcc5v0_typec0: vcc5v0-typec0-en {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_typec0";
++		enable-active-high;
++		gpio = <&gpio1 RK_PA3 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vcc5v0_typec_en>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	clkin_gmac: external-gmac-clock {
++		compatible = "fixed-clock";
++		clock-frequency = <125000000>;
++		clock-output-names = "clkin_gmac";
++		#clock-cells = <0>;
++	};
++
++	backlight: backlight {
++		status = "okay";
++		compatible = "pwm-backlight";
++		pwms = <&pwm0 0 25000 0>;
++		power-supply = <&dc_12v>;
++		enable-gpios = <&gpio1 RK_PA0 GPIO_ACTIVE_HIGH>;
++		brightness-levels = <
++			  0   1   2   3   4   5   6   7
++			  8   9  10  11  12  13  14  15
++			 16  17  18  19  20  21  22  23
++			 24  25  26  27  28  29  30  31
++			 32  33  34  35  36  37  38  39
++			 40  41  42  43  44  45  46  47
++			 48  49  50  51  52  53  54  55
++			 56  57  58  59  60  61  62  63
++			 64  65  66  67  68  69  70  71
++			 72  73  74  75  76  77  78  79
++			 80  81  82  83  84  85  86  87
++			 88  89  90  91  92  93  94  95
++			 96  97  98  99 100 101 102 103
++			104 105 106 107 108 109 110 111
++			112 113 114 115 116 117 118 119
++			120 121 122 123 124 125 126 127
++			128 129 130 131 132 133 134 135
++			136 137 138 139 140 141 142 143
++			144 145 146 147 148 149 150 151
++			152 153 154 155 156 157 158 159
++			160 161 162 163 164 165 166 167
++			168 169 170 171 172 173 174 175
++			176 177 178 179 180 181 182 183
++			184 185 186 187 188 189 190 191
++			192 193 194 195 196 197 198 199
++			200 201 202 203 204 205 206 207
++			208 209 210 211 212 213 214 215
++			216 217 218 219 220 221 222 223
++			224 225 226 227 228 229 230 231
++			232 233 234 235 236 237 238 239
++			240 241 242 243 244 245 246 247
++			248 249 250 251 252 253 254 255>;
++		default-brightness-level = <200>;
++	};
++
++	panel: panel {
++		status = "okay";
++		compatible = "simple-panel";
++		backlight = <&backlight>;
++		power-supply = <&vcc3v3_s0>;
++		enable-gpios = <&gpio1 RK_PA0 GPIO_ACTIVE_HIGH>;
++		prepare-delay-ms = <20>;
++		enable-delay-ms = <20>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&lcd_en>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port: port@0 {
++				reg = <0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				panel_in_edp: endpoint@0 {
++					reg = <0>;
++					remote-endpoint = <&edp_out_panel>;
++				};
++			};
++		};
++	};
++
++	vcc12v_pcie: vcc12v-pcie-regulator {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "vcc12v_pcie";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		enable-active-high;
++		gpio = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pcie_pwr_en>;
++		regulator-always-on;
++		regulator-boot-on;
++		vin-supply = <&dc_12v>;
++	};
++
++	vcc1v8_sdio: vcca1v8_sdio: vcc1v8-sdio {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "vcc1v8_sdio";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++		regulator-boot-on;
++		vin-supply = <&vcc_1v8>;
++	};
++
++	vcc3v0_sdio: vcc3v0-sdio {
++		u-boot,dm-pre-reloc;
++		compatible = "regulator-fixed";
++		regulator-name = "vcc3v0_sdio";
++		regulator-init-microvolt = <3000000>;
++		regulator-min-microvolt = <3000000>;
++		regulator-max-microvolt = <3000000>;
++		enable-active-high;
++		gpio = <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&sdmmc0_pwr_h>;
++		regulator-always-on;
++		regulator-boot-on;
++		vin-supply = <&vcc3v3_sys>;
++	};
++
++	sdio_pwrseq: sdio-pwrseq {
++		u-boot,dm-pre-reloc;
++		compatible = "mmc-pwrseq-simple";
++		clocks = <&rk808 1>;
++		clock-names = "ext_clock";
++		pinctrl-names = "default";
++		pinctrl-0 = <&wifi_enable_h>;
++
++		/*
++		 * On the module itself this is one of these (depending
++		 * on the actual card populated):
++		 * - SDIO_RESET_L_WL_REG_ON
++		 * - PDN (power down when low)
++		 */
++		reset-gpios = <&gpio0 RK_PB2 GPIO_ACTIVE_LOW>;
++	};
++
++	vdd_log: vdd_log {
++		u-boot,dm-pre-reloc;
++		compatible = "pwm-regulator";
++		pwms = <&pwm2 0 25000 1>;
++		pwm-supply = <&vcc_sys>;
++		regulator-name = "vdd_log";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-init-microvolt = <900000>;
++		regulator-min-microvolt = <800000>;
++		regulator-max-microvolt = <1400000>;
++
++		/* for rockchip boot on */
++		rockchip,pwm_id= <2>;
++		rockchip,pwm_voltage = <900000>;
++	};
++};
++
++&edp {
++	status = "okay";
++
++	ports {
++		edp_out: port@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			edp_out_panel: endpoint@0 {
++				reg = <0>;
++				remote-endpoint = <&panel_in_edp>;
++			};
++		};
++	};
++};
++
++&uart2 {
++	status = "okay";
++};
++
++&emmc_phy {
++	status = "okay";
++};
++
++&pwm0 {
++	u-boot,dm-pre-reloc;
++	status = "okay";
++};
++
++&pwm2 {
++	u-boot,dm-pre-reloc;
++	status = "okay";
++	pinctrl-names = "active";
++	pinctrl-0 = <&pwm2_pin_pull_down>;
++};
++
++&saradc {
++	status = "okay";
++};
++
++&sdio0 {
++	u-boot,dm-pre-reloc;
++	clock-frequency = <50000000>;
++	max-frequency = <90000000>;
++	supports-sdio;
++	bus-width = <4>;
++	disable-wp;
++	cap-sd-highspeed;
++	cap-sdio-irq;
++	keep-power-in-suspend;
++	mmc-pwrseq = <&sdio_pwrseq>;
++	non-removable;
++	num-slots = <1>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdio0_bus4 &sdio0_cmd &sdio0_clk>;
++	sd-uhs-sdr104;
++	vqmmc-supply = <&vcc1v8_sdio>;	/* IO line */
++	vmmc-supply = <&vcc3v0_sdio>;		/* card's power */
++	status = "okay";
++};
++
++&sdmmc {
++	u-boot,dm-spl;
++	clock-frequency = <50000000>;
++	max-frequency = <150000000>;
++	supports-sd;
++	bus-width = <4>;
++	cap-mmc-highspeed;
++	cap-sd-highspeed;
++	disable-wp;
++	num-slots = <1>;
++	sd-uhs-sdr12;
++	sd-uhs-sdr25;
++	sd-uhs-sdr50;
++	sd-uhs-sdr104;
++	vqmmc-supply = <&vcc_sd>;
++	vmmc-supply = <&vcc3v0_sdio>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdmmc_clk &sdmmc_cmd &sdmmc_cd &sdmmc_bus4>;
++	cd-gpios = <&gpio0 RK_PA7 GPIO_ACTIVE_LOW>;
++	card-detect-delay = <800>;
++	status = "okay";
++};
++
++&sdhci {
++	u-boot,dm-spl;
++	bus-width = <8>;
++	max-frequency = <25000000>;
++	mmc-hs400-1_8v;
++	mmc-hs400-enhanced-strobe;
++	non-removable;
++	status = "okay";
++};
++
++
++&u2phy0 {
++	/delete-property/ clocks;
++	/delete-property/ clock-names;
++
++	status = "okay";
++
++	u2phy0_otg: otg-port {
++		status = "okay";
++	};
++
++	u2phy0_host: host-port {
++		phy-supply = <&vcc5v0_host>;
++		status = "okay";
++	};
++};
++
++&u2phy1 {
++	/delete-property/ clocks;
++	/delete-property/ clock-names;
++
++	status = "okay";
++
++	u2phy1_otg: otg-port {
++		status = "okay";
++	};
++
++	u2phy1_host: host-port {
++		phy-supply = <&vcc5v0_host>;
++		status = "okay";
++	};
++};
++
++&usb_host0_ehci {
++	/delete-property/ clocks;
++	/delete-property/ clock-names;
++
++	vbus-supply = <&vcc5v0_host>;
++	status = "okay";
++};
++
++&usb_host0_ohci {
++	/delete-property/ clocks;
++	/delete-property/ clock-names;
++
++	vbus-supply = <&vcc5v0_host>;
++	status = "okay";
++};
++
++&usb_host1_ehci {
++	/delete-property/ clocks;
++	/delete-property/ clock-names;
++
++	vbus-supply = <&vcc5v0_host>;
++	status = "okay";
++};
++
++&usb_host1_ohci {
++	/delete-property/ clocks;
++	/delete-property/ clock-names;
++
++	vbus-supply = <&vcc5v0_host>;
++	status = "okay";
++};
++
++&dwc3_typec0 {
++	status = "okay";
++	maximum-speed = "high-speed";
++};
++
++&dwc3_typec1 {
++	vbus-supply = <&vcc5v0_host>;
++	status = "okay";
++	maximum-speed = "high-speed";
++};
++
++&i2c0 {
++	u-boot,dm-pre-reloc;
++	clock-frequency = <400000>;
++	i2c-scl-rising-time-ns = <168>;
++	i2c-scl-falling-time-ns = <4>;
++	status = "okay";
++
++	rk808: pmic@1b {
++		compatible = "rockchip,rk808";
++		clock-output-names = "rk808-clkout1", "rk808-clkout2";
++		interrupt-parent = <&gpio1>;
++		interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pmic_int_l>;
++		reg = <0x1b>;
++		rockchip,system-power-controller;
++		#clock-cells = <1>;
++		status = "okay";
++		wakeup-source;
++
++		vcc1-supply = <&vcc_sys>;
++		vcc2-supply = <&vcc_sys>;
++		vcc3-supply = <&vcc_sys>;
++		vcc4-supply = <&vcc_sys>;
++		vcc6-supply = <&vcc_sys>;
++		vcc7-supply = <&vcc_sys>;
++		vcc8-supply = <&vcc3v3_sys>;
++		vcc9-supply = <&vcc_sys>;
++		vcc10-supply = <&vcc_sys>;
++		vcc11-supply = <&vcc_sys>;
++		vcc12-supply = <&vcc3v3_sys>;
++		vddio-supply = <&vcc_1v8>;
++
++		regulators {
++			vdd_center: DCDC_REG1 {
++				regulator-name = "vdd_center";
++				regulator-min-microvolt = <750000>;
++				regulator-max-microvolt = <1400000>;
++				regulator-ramp-delay = <6001>;
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++
++			vcc_1v8: DCDC_REG4 {
++				regulator-name = "vcc_1v8";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1800000>;
++				};
++			};
++
++			vcc1v8_dvp: LDO_REG1 {
++				regulator-name = "vcc1v8_dvp";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1800000>;
++				};
++			};
++
++			vcc_sd: LDO_REG4 {
++				regulator-name = "vcc_sd";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <3300000>;
++				};
++			};
++
++			vcca1v8_codec: LDO_REG7 {
++				regulator-name = "vcca1v8_codec";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <1800000>;
++				};
++			};
++
++			vcc_3v0: LDO_REG8 {
++				regulator-name = "vcc_3v0";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-min-microvolt = <3000000>;
++				regulator-max-microvolt = <3000000>;
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <3000000>;
++				};
++			};
++
++			vcc3v3_s0: SWITCH_REG2 {
++				regulator-name = "vcc3v3_s0";
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++			};
++		};
++	};
++};
++
++&i2c1 {
++	i2c-scl-rising-time-ns = <300>;
++	i2c-scl-falling-time-ns = <15>;
++	status = "okay";
++};
++
++&i2c3 {
++	i2c-scl-rising-time-ns = <450>;
++	i2c-scl-falling-time-ns = <15>;
++	status = "okay";
++};
++
++&i2c4 {
++	i2c-scl-rising-time-ns = <600>;
++	i2c-scl-falling-time-ns = <20>;
++	status = "okay";
++};
++
++&io_domains {
++	u-boot,dm-pre-reloc;
++	status = "okay";
++
++	bt656-supply = <&vcc1v8_dvp>;
++	audio-supply = <&vcca1v8_codec>;
++	sdmmc-supply = <&vcc_sd>;
++	gpio1830-supply = <&vcc_3v0>;
++};
++
++&pmu_io_domains {
++	pmu1830-supply = <&vcc_3v0>;
++	status = "okay";
++};
++
++&pinctrl {
++	pmic {
++		pmic_int_l: pmic-int-l {
++			rockchip,pins =
++				<1 21 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++
++	usb2 {
++		host_vbus_drv: host-vbus-drv {
++			rockchip,pins = <4 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++		host_usb3_drv: host-usb3-drv {
++			rockchip,pins = <1 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	typec {
++		vcc5v0_typec_en: vcc5v0-typec-en {
++			rockchip,pins = <1 RK_PA3 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++	};
++
++	sdio-pwrseq {
++		wifi_enable_h: wifi-enable-h {
++			rockchip,pins =
++				<0 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	pcfg_pull_up_20ma: pcfg-pull-up-20ma {
++		bias-pull-up;
++		drive-strength = <20>;
++	};
++
++	pcfg_pull_none_20ma: pcfg-pull-none-20ma {
++		bias-disable;
++		drive-strength = <20>;
++	};
++
++	sdio0 {
++		sdio0_bus1: sdio0-bus1 {
++			rockchip,pins =
++				<2 RK_PC4 RK_FUNC_1 &pcfg_pull_up_20ma>;
++		};
++
++		sdio0_bus4: sdio0-bus4 {
++			rockchip,pins =
++				<2 RK_PC4 RK_FUNC_1 &pcfg_pull_up_20ma>,
++				<2 RK_PC5 RK_FUNC_1 &pcfg_pull_up_20ma>,
++				<2 RK_PC6 RK_FUNC_1 &pcfg_pull_up_20ma>,
++				<2 RK_PC7 RK_FUNC_1 &pcfg_pull_up_20ma>;
++		};
++
++		sdio0_cmd: sdio0-cmd {
++			rockchip,pins =
++				<2 RK_PD0 RK_FUNC_1 &pcfg_pull_up_20ma>;
++		};
++
++		sdio0_clk: sdio0-clk {
++			rockchip,pins =
++				<2 RK_PD1 RK_FUNC_1 &pcfg_pull_none_20ma>;
++		};
++	};
++
++	pcie {
++		pcie_pwr_en: pcie-pwr-en {
++			rockchip,pins =
++				<1 RK_PD0 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	edp {
++		lcd_en: lcd-en {
++			rockchip,pins = <1 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	sdmmc {
++		sdmmc_bus1: sdmmc-bus1 {
++			rockchip,pins =
++				<4 RK_PB0 RK_FUNC_1 &pcfg_pull_up_8ma>;
++		};
++
++		sdmmc_bus4: sdmmc-bus4 {
++			rockchip,pins =
++				<4 RK_PB0 RK_FUNC_1 &pcfg_pull_up_8ma>,
++				<4 RK_PB1 RK_FUNC_1 &pcfg_pull_up_8ma>,
++				<4 RK_PB2 RK_FUNC_1 &pcfg_pull_up_8ma>,
++				<4 RK_PB3 RK_FUNC_1 &pcfg_pull_up_8ma>;
++		};
++
++		sdmmc_clk: sdmmc-clk {
++			rockchip,pins =
++				<4 RK_PB4 RK_FUNC_1 &pcfg_pull_none_18ma>;
++		};
++
++		sdmmc_cmd: sdmmc-cmd {
++			rockchip,pins =
++				<4 RK_PB5 RK_FUNC_1 &pcfg_pull_up_8ma>;
++		};
++		
++		sdmmc0_pwr_h: sdmmc0-pwr-h {
++			rockchip,pins = <0 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++};
++
++&gmac {
++        phy-supply = <&vcc_phy>;
++	phy-mode = "rgmii";
++	clock_in_out = "input";
++	snps,reset-gpio = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
++	snps,reset-active-low;
++	snps,reset-delays-us = <0 10000 50000>;
++	assigned-clocks = <&cru SCLK_RMII_SRC>;
++	assigned-clock-parents = <&clkin_gmac>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&rgmii_pins>;
++	tx_delay = <0x28>;
++	rx_delay = <0x20>;
++	status = "okay";
++};
++
++&spi1 {
++	u-boot,dm-spl;
++	status = "okay";
++
++	spiflash: spi-flash@0 {
++		u-boot,dm-spl;
++		#address-cells = <0x1>;
++		#size-cells = <1>;
++		compatible = "spi-flash";
++		reg = <0x0>;
++		spi-max-frequency = <25000000>;
++		status = "okay";
++
++		partitions {
++			compatible = "fixed-partitions";
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			loader@8000 {
++				label = "loader";
++				reg = <0x0 0x3F8000>;
++			};
++
++			env@3f8000 {
++				label = "env";
++				reg = <0x3F8000 0x8000>;
++			};
++
++			vendor@7c0000 {
++				label = "vendor";
++				reg = <0x7C0000 0x40000>;
++			};
++		};
++	};
++};
+diff -Naur a/rk3399-u-boot.dtsi b/rk3399-u-boot.dtsi
+--- a/arch/arm/dts/rk3399-u-boot.dtsi	1969-12-31 19:00:00.000000000 -0500
++++ b/arch/arm/dts/rk3399-u-boot.dtsi	2019-06-12 14:44:17.847922000 -0400
+@@ -0,0 +1,100 @@
++/*
++ * (C) Copyright 2018 Rockchip Electronics Co., Ltd
++ *
++ * SPDX-License-Identifier:     GPL-2.0+
++ */
++
++/ {
++	aliases {
++		mmc0 = &sdhci;
++		mmc1 = &sdmmc;
++	};
++
++	chosen {
++		stdout-path = &uart2;
++		u-boot,spl-boot-order = &sdhci, &sdmmc;
++	};
++};
++
++&uart2 {
++	clock-frequency = <24000000>;
++	u-boot,dm-pre-reloc;
++};
++
++&saradc {
++	u-boot,dm-pre-reloc;
++};
++
++&sdmmc {
++	u-boot,dm-pre-reloc;
++};
++
++&sdhci {
++	u-boot,dm-pre-reloc;
++};
++
++&pmu {
++	u-boot,dm-pre-reloc;
++};
++
++&pmugrf {
++	u-boot,dm-pre-reloc;
++};
++
++&pmusgrf {
++	u-boot,dm-pre-reloc;
++};
++
++&pmucru {
++	u-boot,dm-pre-reloc;
++};
++
++&cru {
++	u-boot,dm-pre-reloc;
++};
++
++&grf {
++	u-boot,dm-pre-reloc;
++};
++
++&cic {
++	u-boot,dm-pre-reloc;
++};
++
++&dmc {
++	u-boot,dm-pre-reloc;
++};
++
++&dwc3_typec0 {
++	u-boot,dm-pre-reloc;
++};
++
++&dwc3_typec1 {
++	u-boot,dm-pre-reloc;
++};
++
++&emmc_phy {
++	u-boot,dm-pre-reloc;
++};
++
++&u2phy0 {
++	u-boot,dm-pre-reloc;
++	status = "okay";
++};
++
++&u2phy0_otg {
++	u-boot,dm-pre-reloc;
++	status = "okay";
++};
++
++&vopl {
++	u-boot,dm-pre-reloc;
++};
++
++&vopb {
++	u-boot,dm-pre-reloc;
++};
++
++&pinctrl {
++	u-boot,dm-pre-reloc;
++};
